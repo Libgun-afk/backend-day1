@@ -1,0 +1,119 @@
+// const http = require("http");
+
+// const port = 8000;
+
+// const obj = { data: { a: 1, b: 2, c: 3 }, data2: { aa: 2 } };
+// console.log(obj);
+
+// const server = http.createServer((req, res) => {
+//   const json = JSON.stringify(obj);
+
+//   res.statusCode = 200;
+//   res.setHeader("Content-Type", "text/plain");
+//   //   res.end("hello");
+//   res.end(json);
+// });
+
+// server.listen(port, () => {
+//   console.log(`running on ${port} `);
+// });
+
+// const express = require("express");
+// const port = 8000;
+// const app = express();
+
+// const obj = { data: { a: 1, b: 2, c: 3 }, data2: { aa: 2 } };
+// console.log(obj);
+
+// app.get("/", (req, res) => {
+//   const json = JSON.stringify(obj);
+//   res.send(json);
+// });
+
+// app.post("/", (req, res) => {
+//   res.send("...post");
+// });
+
+// app.put("/", (req, res) => {
+//   res.send("...put");
+// });
+
+// app.delete("/", (req, res) => {
+//   res.send("...delete");
+// });
+
+// app.listen(port, () => {
+//   console.log(obj);
+// });
+
+const express = require("express");
+const port = 8000;
+const app = express();
+
+app.use(express.json());
+
+const db = {
+  users: [
+    {
+      userId: "1",
+      username: "123",
+      job: "Jobless",
+    },
+    {
+      userId: "2",
+      username: "098",
+      job: "Architecture",
+    },
+  ],
+  posts: [{ userid: "1", title: "Express Surj baina", desc: "Amjilt" }],
+};
+
+app.get("/users", (request, response) => {
+  response.send(db.users);
+});
+
+app.get("/user", (req, res) => {
+  const user = db.users.filter((el) => el.userId === req.query.id);
+
+  if (user.length === 0) {
+    res.status(404);
+    res.send(`User not found by this id=${req.query.id} `);
+    return;
+  }
+
+  res.send(user[0]);
+});
+
+app.post("/user", (req, res) => {
+  const foundedUser = db.users.find(({ userId }) => userId === req.body.id);
+
+  if (!foundedUser) {
+    res.status(404);
+    res.send(`User not found by this id=${req.body.id} `);
+    return;
+  }
+
+  foundedUser.username = req.body.name;
+  res.send("success");
+});
+
+app.listen(port, () => {
+  console.log(`localhost:${port}`);
+});
+
+const fs = require("fs");
+const express = require("express");
+const PORT = 8000;
+const app = express();
+
+app.use(express.json());
+
+app.get("/users", (req, res) => {
+  const resultJson = fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+  res.send(result);
+});
+
+app.listen(PORT, () => {
+  console.log(`localhost:${PORT}`);
+});

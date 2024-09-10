@@ -1,0 +1,20 @@
+{
+  "users": [
+    {
+      "userId": "1",
+      "username": "String",
+      "profilePic": "String"
+    }
+  ],
+
+  "posts": [
+    {
+      "userId": "1",
+      "postId": "11",
+      "title": "String",
+      "desc": "String",
+      "image": "String",
+      "publishedAt": "Date"
+    }
+  ]
+}

@@ -1,47 +1,32 @@
-// const http = require("http");
-
-// const port = 8000;
-
-// const obj = { data: { a: 1, b: 2, c: 3 }, data2: { aa: 2 } };
-// console.log(obj);
-
-// const server = http.createServer((req, res) => {
-//   const json = JSON.stringify(obj);
-
-//   res.statusCode = 200;
-//   res.setHeader("Content-Type", "text/plain");
-//   //   res.end("hello");
-//   res.end(json);
-// });
-
-// server.listen(port, () => {
-//   console.log(`running on ${port} `);
-// });
-
 const express = require("express");
-const port = 8000;
+const PORT = 8000;
 const app = express();
+app.use(express.json());
+const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 
-const obj = { data: { a: 1, b: 2, c: 3 }, data2: { aa: 2 } };
-console.log(obj);
+app.get("/users", async (req, res) => {
+  const resultJson = await fs.readFileSync("db.json", "utp-8");
+  const result = JSON.parse(resultJson);
 
-app.get("/", (req, res) => {
-  const json = JSON.stringify(obj);
-  res.send(json);
+  res.send(result.users);
 });
 
-app.post("/", (req, res) => {
-  res.send("...post");
+app.get("/user/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const resultJson = await fs.readFileSync("db.json", "utp-8");
+  const result = JSON.parse(resultJson);
+
+  const user = result.users.find((el) => el.userId === id);
+
+  if (!user) {
+    res.status(404);
+    res.send(`not = ${id}`);
+    return;
+  }
 });
 
-app.put("/", (req, res) => {
-  res.send("...put");
-});
-
-app.delete("/", (req, res) => {
-  res.send("...delete");
-});
-
-app.listen(port, () => {
-  console.log(obj);
+app.listen(PORT, () => {
+  console.log(`localhost${PORT}`);
 });
