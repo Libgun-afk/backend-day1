@@ -2,8 +2,13 @@
   "users": [
     {
       "userId": "1",
-      "username": "String",
-      "profilePic": "String"
+      "username": "Jhonny",
+      "profilePic": "https://scontent.fuln2-2.fna.fbcdn.net/v/t45.1600-4/451073253_120210554319160356_1174969549445409308_n.png?stp=cp0_dst-jpg_q90_s1080x2048_spS444&_nc_cat=1&ccb=1-7&_nc_sid=467c85&_nc_ohc=h-EkIdxlfJYQ7kNvgHQZ-Sw&_nc_ht=scontent.fuln2-2.fna&oh=00_AYAZ-8oNxIr5tJ5dpdHKcEAhWD_TzmsMFHHWm7cHcd3g8Q&oe=66E5E9CD"
+    },
+    {
+      "userId": "2",
+      "username": "Bob",
+      "profilePic": "https://scontent.fuln2-2.fna.fbcdn.net/v/t39.30808-6/458492176_1060339885461326_2235157197625960752_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=pyh1ORA-sEMQ7kNvgEwde0f&_nc_ht=scontent.fuln2-2.fna&_nc_gid=A862fsOWQhEY5FXRnC3gn9P&oh=00_AYCMdXtkPz4mDz1cFSu3fkBrcga6wN9vspLodjAypgI0lA&oe=66E5FF30"
     }
   ],
 
@@ -11,10 +16,10 @@
     {
       "userId": "1",
       "postId": "11",
-      "title": "String",
-      "desc": "String",
-      "image": "String",
-      "publishedAt": "Date"
+      "title": "Garchig",
+      "desc": "desc",
+      "image": "https://scontent.fuln2-2.fna.fbcdn.net/v/t45.1600-4/451073253_120210554319160356_1174969549445409308_n.png?stp=cp0_dst-jpg_q90_s1080x2048_spS444&_nc_cat=1&ccb=1-7&_nc_sid=467c85&_nc_ohc=h-EkIdxlfJYQ7kNvgHQZ-Sw&_nc_ht=scontent.fuln2-2.fna&oh=00_AYAZ-8oNxIr5tJ5dpdHKcEAhWD_TzmsMFHHWm7cHcd3g8Q&oe=66E5E9CD",
+      "publishedAt": "2024.09.10"
     }
   ]
 }

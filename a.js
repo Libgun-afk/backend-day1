@@ -1,3 +1,5 @@
+/** @format */
+
 // const express = require("express");
 // const mongoose = require("mongoose");
 // const bodyParser = require("body-parser");
@@ -93,12 +95,6 @@ app.use(express.json());
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 
-// 2. Post read
-// 4. User Read
-
-// 1. Post create
-// 3. User create
-
 app.get("/users", async (req, res) => {
   const resultJson = await fs.readFileSync("./db.json", "utf-8");
   const result = JSON.parse(resultJson);
@@ -189,27 +185,58 @@ app.post("/comment", async (req, res) => {
   res.send("Succesfully created comment");
 });
 
-app.put("/comment/:id", async (req, res) => {
-  const { text } = req.body;
-  const { id } = req.params;
-  const resultJson = await fs.readFileSync("./db.json", "utf-8");
-  const result = JSON.parse(resultJson);
+// app.put("/comment/:id", async (req, res) => {
+//   const { text } = req.body;
+//   const { id } = req.params;
+//   const resultJson = await fs.readFileSync("./db.json", "utf-8");
+//   const result = JSON.parse(resultJson);
 
-  const updateHiihGjBuiComments = result.comments.map((el) => {
-    if (el.commentId == id) {
-      return { ...el, text: text };
-    } else {
-      return el;
-    }
-  });
+//   const updateHiihGjBuiComments = result.comments.map((el) => {
+//     if (el.commentId == id) {
+//       return { ...el, text: text };
+//     } else {
+//       return el;
+//     }
+//   });
 
-  result.comments = updateHiihGjBuiComments;
+//   result.comments = updateHiihGjBuiComments;
 
-  await fs.writeFileSync("./db.json", JSON.stringify(result), "utf-8");
+//   await fs.writeFileSync("./db.json", JSON.stringify(result), "utf-8");
 
-  res.send("Succesfully updated comment");
-});
+//   res.send("Succesfully updated comment");
+// });
 
 app.listen(PORT, () => {
   console.log(`localhost:${PORT}`);
+});
+
+//
+//
+//
+
+app.post("/user", async (request, response) => {
+  const newUser = request.body;
+
+  if (!newUser || !newUser.id || !newUser.name) {
+    return response.status(400).send("Invalid user data");
+  }
+
+  try {
+    // JSON файлыг унших
+    const resultJson = await fs.readFile("./db.json", "utf-8");
+    const result = JSON.parse(resultJson);
+
+    // Шинэ хэрэглэгчийг нэмэх
+    result.users = result.users || [];
+    result.users.push(newUser);
+
+    // JSON файлыг шинэчлэн бичих
+    await fs.writeFile("./db.json", JSON.stringify(result, null, 2));
+
+    // Амжилттай хариу илгээх
+    response.status(201).send("User added successfully");
+  } catch (error) {
+    console.error("Error adding user:", error);
+    response.status(500).send("Internal Server Error");
+  }
 });
