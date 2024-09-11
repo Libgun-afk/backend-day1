@@ -380,3 +380,140 @@ app.put("/comment/:id", async (req, res) => {
 
   res.send("Succesfully updated comment");
 });
+
+// const express = require("express");
+// const PORT = 8000;
+// const app = express();
+// app.use(express.json());
+// const fs = require("fs");
+// const { v4: uuidv4 } = require("uuid");
+// const { fetchData } = require("./helper");
+
+app.post("/users", async (req, res) => {
+  const { username, password } = req.body;
+  const result = await fetchData();
+
+  const doesExist = result.users.find((el) => el.username == username);
+
+  if (!doesExist) {
+    result.users.push({
+      username,
+      password,
+    });
+    await fs.writeFileSync("./db.json", JSON.stringify(result), "utf-8");
+    res.send("amjillttai");
+    return;
+  }
+
+  res.send("bnshde");
+});
+
+app.put("/users", async (req, res) => {
+  const { username, password } = req.body;
+  const result = await fetchData();
+
+  const doesExist = result.users.find((el) => el.username == username);
+
+  if (!doesExist || doesExist.password !== password) {
+    res.status(400).send("taarsngue ali neg n");
+    return;
+  }
+
+  res.send("nevterlee");
+});
+
+app.listen(PORT, () => {
+  console.log(`enender asav localhost${PORT}`);
+});
+
+const express = require("express");
+const PORT = 8000;
+const app = express();
+app.use(express.json());
+const bcrypt = require("bcrypt");
+const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
+
+app.post("/user", async (req, res) => {
+  const { username, password } = req.body;
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+  const doesExist = result.users.find((el) => el.username == username);
+
+  if (!doesExist) {
+    result.users.push({
+      username,
+      password,
+    });
+    await fs.writeFileSync("./db.json", JSON.stringify(result), "utf-8")
+    res.send("amjilttai nemegdlee")
+    return;
+  }
+  result.users.push({
+    username,
+    password,
+    code: "",
+  });
+  await fs.writeFileSync("./db.json", JSON.stringify(result), "utf-8");
+  res.send("amjilttai");
+});
+
+app.put("/user", async (req, res) => {
+  const { username, password, confirmPassword } = req.body;
+
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+
+  const doesExist = result.users.find((el) => el.username == username);
+  if (password !== confirmPassword) {
+  }
+
+  if (!doesExist || doesExist.password !== password) {
+    res.status(400).send("taarsngue ali neg n");
+    return;
+  }
+
+  res.send("nevterlee");
+});
+
+app.post("/hash", async (req, res) => {
+  const { password } = req.body;
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+
+  console.log(result.users);
+
+  result.users.push({
+    password: hashedPassword,
+  });
+
+  await fs.writeFileSync("./db.json", JSON.stringify(result), "utf-8");
+
+  res.send(hashedPassword);
+});
+
+app.put('/forgot'){
+  const {email} = req.body
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+  const doesExist = result.users.find((el) => el.username == username);
+  const randomCode = Math.floor(Math.random*9999)
+  doesExist.code = 'randomCode'
+}
+
+app.put('/confirm'){
+  const {email,code,password} = req.body
+
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+  const doesExist = result.users.find((el) => el.username == username);
+  doesExist.code == code
+  doesExist.code = 'randomCode'
+}
+
+app.listen(PORT, () => {
+  console.log(`localhost:${PORT}`);
+});
