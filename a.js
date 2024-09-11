@@ -240,3 +240,143 @@ app.post("/user", async (request, response) => {
     response.status(500).send("Internal Server Error");
   }
 });
+//
+//
+//
+//
+// db.json dotor bga buh hereglegchid
+
+app.get("/users", async (req, res) => {
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+  res.send(result.users);
+});
+
+app.get("/posts", async (req, res) => {
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+  res.send(result.posts);
+});
+
+app.get("/comments", async (req, res) => {
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+  if (result.length === 0) {
+    res.status(404).res.send(`hooson bna`);
+  }
+  {
+    res.send(result.comments);
+  }
+});
+
+// hereglegchiig id gaar n oloh
+
+app.get("/user/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+
+  const user = result.users.find((el) => el.userId === id);
+  if (!user) {
+    res.status(404);
+    res.send(`user not found = ${id}`);
+    return;
+  }
+  res.send(user);
+});
+
+// id gaar n post -iig oloh
+
+app.get("/post/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+
+  const post = result.posts.find((el) => el.postId === id);
+
+  if (!post) {
+    res.status(404);
+    res.send(`Энэ id-р дараах нийтлэлийг олж чадсангүй ${id}`);
+  }
+
+  const commentsOfThisPost = res.comment.filter((el) => el.postId == id);
+
+  res.send({
+    post: post,
+    comments: commentsOfThisPost,
+  });
+});
+app.post("/user", async (req, res) => {
+  const { userId, username, profilePic } = req.body;
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+  const publishedAt = new Date().toISOString();
+
+  result.users.push({
+    userId,
+    username,
+    profilePic,
+    publishedAt,
+  });
+  await fs.writeFileSync("./db.json", JSON.stringify(result), "utf-8");
+
+  res.send("Succesfully created user");
+});
+
+app.post("/post", async (req, res) => {
+  const { desc, image, title, userId } = req.body;
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+  const postId = uuidv4();
+  const publishedAt = new Date().toISOString();
+
+  result.posts.push({
+    postId: postId,
+    userId: userId,
+    description: desc,
+    image: image,
+    title: title,
+    publishedAt: publishedAt,
+  });
+
+  await fs.writeFileSync("./db.json", JSON.stringify(result), "utf-8");
+
+  res.send("Succesfully created post");
+});
+
+app.post("/comment", async (req, res) => {
+  const { userId, text } = req.body;
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+  const postId = uuidv4();
+  const publishedAt = new Date().toISOString();
+
+  result.comments.push({ text, postId, userId, publishedAt });
+
+  await fs.writeFileSync("./db.json", JSON.stringify(result), "utf-8");
+
+  res.send("Succesfully created commennt");
+});
+
+app.put("/comment/:id", async (req, res) => {
+  const { text } = req.body;
+  const { id } = req.params;
+  const resultJson = await fs.readFileSync("./db.json", "utf-8");
+  const result = JSON.parse(resultJson);
+
+  const updateHiihGjBuiComments = result.comments.map((el) => {
+    if (el.commentId == id) {
+      return { ...el, text: text };
+    } else {
+      return el;
+    }
+  });
+
+  result.comments = updateHiihGjBuiComments;
+
+  await fs.writeFileSync("./db.json", JSON.stringify(result), "utf-8");
+
+  res.send("Succesfully updated comment");
+});
