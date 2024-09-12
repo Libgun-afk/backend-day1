@@ -479,7 +479,7 @@ app.put("/user", async (req, res) => {
 app.post("/hash", async (req, res) => {
   const { password } = req.body;
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, hash);
 
   const resultJson = await fs.readFileSync("./db.json", "utf-8");
   const result = JSON.parse(resultJson);
